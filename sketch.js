@@ -94,6 +94,9 @@ function setup() {
   pixelDensity(1);
   createCanvas(windowWidth, windowHeight);
 
+  //requestFullscreen();
+  requestMotion();
+
   imageMode(CENTER); 
   noStroke(); 
 
@@ -188,13 +191,15 @@ function requestMotion() {
         .then(response => {
           if (response === 'granted') {
             motionAllowed = true;
-            btn.remove(); // remove button after permission granted
+            btn.remove();
           } else {
             alert('Permission denied');
            }
         })
         .catch(console.error);
     });
+  } else {
+    motionAllowed = true;
   }
 }
 
@@ -219,8 +224,6 @@ function mouseReleased() {
   switch (gameState) {  
     case GameState.WELCOME:
       if (isInsideButton(mouseX, mouseY, virtualWidth / 2, virtualHeight / 2 + 50)) {
-        requestFullscreen();
-        requestMotion();
         gameState = GameState.PLAYING;
       }
       break;
