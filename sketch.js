@@ -135,6 +135,12 @@ function setupGame() {
 // Main state machine
 // ---------------------------------------------------------------------------------
 
+window.addEventListener('deviceorientation', (event) => {
+  if (motionAllowed) {
+    rotationX = event.beta; // Or event.gamma, depending on device orientation
+  }
+});
+
 function draw() {
   background(0);
 
