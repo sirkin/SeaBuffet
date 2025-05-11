@@ -190,6 +190,7 @@ function requestMotion() {
       } else {
         //console.warn('Motion permission denied');
         alert('Permission denied');
+        motionAllowed = false;
       }
     })
     .catch(err => {
@@ -223,9 +224,9 @@ function mouseReleased() {
     case GameState.WELCOME:
       if (isInsideButton(mouseX, mouseY, virtualWidth / 2, virtualHeight / 2 + 50)) {
 
-        //requestFullscreen();
-        requestMotion();
-
+        if (!motionAllowed) {
+          requestMotion();
+        }
         gameState = GameState.PLAYING;
       }
       break;
