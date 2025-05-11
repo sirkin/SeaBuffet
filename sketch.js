@@ -94,9 +94,6 @@ function setup() {
   pixelDensity(1);
   createCanvas(windowWidth, windowHeight);
 
-  //requestFullscreen();
-  requestMotion();
-
   imageMode(CENTER); 
   noStroke(); 
 
@@ -132,84 +129,6 @@ function setupGame() {
 
   stopMotion();
   score = 0; 
-}
-
-let posY;
-
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  posY = height / 2;
-  background(220);
-  textAlign(CENTER, CENTER);
-  textSize(24);
-  fill(0);
-
-  // iOS requires permission
-  if (typeof DeviceMotionEvent !== 'undefined' &&
-      typeof DeviceMotionEvent.requestPermission === 'function') {
-    DeviceMotionEvent.requestPermission()
-      .then(response => {
-        if (response === 'granted') {
-          console.log('Motion permission granted');
-          motionAllowed = true;
-        } else {
-          console.warn('Motion permission denied');
-        }
-      })
-      .catch(console.error);
-  } else {
-    motionAllowed = true;
-  }
-}
-
-function draw() {
-  background(220);
-
-  if (motionAllowed) {
-    let tilt = rotationX || 0;
-    posY = map(tilt, -90, 90, 0, height);
-  }
-
-  fill(100, 200, 255);
-  ellipse(width / 2, posY, 50);
-  fill(0);
-  text("rotationX: " + nf(rotationX, 1, 2), width / 2, 30);
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
-/*
-// ---------------------------------------------------------------------------------
-// Mobile permission
-// ---------------------------------------------------------------------------------
-
-function requestMotion() {
-  if (typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function') {
-  DeviceMotionEvent.requestPermission()
-    .then(response => {
-      if (response === 'granted') {
-        alert('Permission granted');
-        //console.log('Motion permission granted');
-      } else {
-        //console.warn('Motion permission denied');
-        alert('Permission denied');
-      }
-    })
-    .catch('Catch error') //.catch(console.error);
-  } else {
-    motionAllowed = true;
-  }
-}
-
-function requestFullscreen() {
-  let canvas = document.querySelector('canvas');
-  if (canvas.requestFullscreen) {
-    canvas.requestFullscreen().catch(err => {
-      console.warn('Fullscreen request failed:', err);
-    });
-  }
 }
 
 // ---------------------------------------------------------------------------------
@@ -256,6 +175,39 @@ function draw() {
 }
 
 // ---------------------------------------------------------------------------------
+// Mobile permission
+// ---------------------------------------------------------------------------------
+
+function requestMotion() {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function') {
+  DeviceMotionEvent.requestPermission()
+    .then(response => {
+      if (response === 'granted') {
+        alert('Permission granted');
+        motionAllowed = true;
+        //console.log('Motion permission granted');
+      } else {
+        //console.warn('Motion permission denied');
+        alert('Permission denied');
+      }
+    })
+    .catch(alert('Catch error')); //.catch(console.error);
+  } else {
+    motionAllowed = true;
+  }
+}
+
+function requestFullscreen() {
+  let canvas = document.querySelector('canvas');
+  if (canvas.requestFullscreen) {
+    canvas.requestFullscreen().catch(err => {
+      console.warn('Fullscreen request failed:', err);
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------------
 // User interaction
 // ---------------------------------------------------------------------------------
 
@@ -267,6 +219,10 @@ function mouseReleased() {
   switch (gameState) {  
     case GameState.WELCOME:
       if (isInsideButton(mouseX, mouseY, virtualWidth / 2, virtualHeight / 2 + 50)) {
+
+        //requestFullscreen();
+        requestMotion();
+
         gameState = GameState.PLAYING;
       }
       break;
