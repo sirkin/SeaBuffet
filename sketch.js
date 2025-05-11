@@ -23,7 +23,7 @@ let virtualWidth = 800;
 let virtualHeight = 450;
 let scaleFactor;
 
-let useTouch = true;
+let useTouch = false;
 let isPressed;
 
 let bgCloudCt = 2;
@@ -94,8 +94,6 @@ function setup() {
   pixelDensity(1);
   createCanvas(windowWidth, windowHeight);
 
-  requestOrientation();
-
   imageMode(CENTER); 
   noStroke(); 
 
@@ -154,7 +152,7 @@ function draw() {
   if (useTouch) {
     posY = mouseY;
   } else {
-    let tiltY = rotationX || 0;
+    let tiltY = rotationX;
     posY = map(tiltY, -90, 90, 0, height);
   }
 
@@ -179,20 +177,6 @@ function draw() {
 // ---------------------------------------------------------------------------------
 // Mobile permission
 // ---------------------------------------------------------------------------------
-
-function requestOrientation() {
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission()
-      .then(response => {
-        if (response === 'granted') {
-          window.addEventListener('deviceorientation', handleMotion, true);
-        } else {
-          console.error('Permission denied');
-        }
-      })
-      .catch(console.error);
-  }
-}
 
 function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
