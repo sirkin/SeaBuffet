@@ -215,7 +215,7 @@ function requestFullscreen() {
 // ---------------------------------------------------------------------------------
 // User interaction
 // ---------------------------------------------------------------------------------
-
+/*
 function mousePressed() { 
   isPressed = true; 
 } 
@@ -253,7 +253,7 @@ function touchEnded() {
   mouseReleased();
   return false;
 }
-
+*/
 function isInsideButton(mx, my, centerX, topY, btnW = 150, btnH = 50) {
   let sx = (windowWidth - virtualWidth * scaleFactor) / 2 + (centerX - btnW / 2) * scaleFactor;
   let sy = (windowHeight - virtualHeight * scaleFactor) / 2 + topY * scaleFactor;
