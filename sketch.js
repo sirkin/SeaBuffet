@@ -72,8 +72,7 @@ let lowOxyColor;
 let sea; 
 let seaX = 0; 
 
-let motionX = 0;
-let motionY = 0;
+let posY;
 let score = 0; 
 
 let motionButton;
