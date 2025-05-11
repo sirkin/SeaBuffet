@@ -192,7 +192,10 @@ function requestMotion() {
         alert('Permission denied');
       }
     })
-    .catch(alert('Catch error')); //.catch(console.error);
+    .catch(err => {
+      console.error(err);
+      alert('Error requesting motion permission');
+    });
   } else {
     motionAllowed = true;
   }
