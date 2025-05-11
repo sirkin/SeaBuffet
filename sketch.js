@@ -77,7 +77,7 @@ let motionY = 0;
 let score = 0; 
 
 /////////////////
-
+/*
 let y;
 //let motionAllowed = false;
 let motionButton;
@@ -139,10 +139,9 @@ function requestMotionPermission() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
+*/
 /////////////////
 
-/*
 // ---------------------------------------------------------------------------------
 // Setup & initialize
 // ---------------------------------------------------------------------------------
@@ -171,6 +170,8 @@ function setup() {
   for (let i = 0; i < fgCloudCt; i++) resetCloud(i, true, false); 
   
   setupGame(); 
+
+  createMotionButton();
 } 
 
 function windowResized() {
@@ -196,6 +197,19 @@ function setupGame() {
 
   stopMotion();
   score = 0; 
+}
+
+function createMotionButton() {
+  if (
+    typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function'
+  ) {
+    motionButton = createButton('Enable Motion');
+    motionButton.position(width / 2 - 60, height / 2);
+    motionButton.mousePressed(requestMotionPermission);
+  } else {
+    motionAllowed = true;
+  }
 }
 
 // ---------------------------------------------------------------------------------
@@ -244,6 +258,9 @@ function draw() {
       drawGameOverScene(); 
       break;
   }
+  fill(0);
+  text("rotationX: " + nf(rotationX, 1, 2), width / 2, 30);
+  
   drawingContext.restore();
 }
 
@@ -663,4 +680,3 @@ function drawProgress() {
   textSize(16);
   text("score: " + score, virtualWidth - 70, 20);
 }
-*/
