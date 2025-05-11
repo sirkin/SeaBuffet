@@ -3,6 +3,60 @@
 // https://www.instructables.com/How-to-control-a-simple-Processing-game-with-Ardui/
 // wannapa kaewluan's artwork https://www.vecteezy.com/members/110443970420071647799
 
+let y;
+let motionAllowed = false;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  y = height / 2;
+  background(220);
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  fill(0);
+
+  // iOS requires permission
+  if (
+    typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function'
+  ) {
+    let btn = createButton('Enable Motion');
+    btn.position(width / 2 - 60, height / 2);
+    btn.mousePressed(() => {
+      DeviceMotionEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            motionAllowed = true;
+            btn.remove(); // remove button after permission granted
+          } else {
+            alert('Permission denied');
+          }
+        })
+        .catch(console.error);
+    });
+  } else {
+    // Other platforms don’t need permission
+    motionAllowed = true;
+  }
+}
+
+function draw() {
+  background(220);
+
+  if (motionAllowed) {
+    let tilt = rotationX || 0;
+    y = map(tilt, -90, 90, 0, height);
+  }
+
+  fill(100, 200, 255);
+  ellipse(width / 2, y, 50);
+  fill(0);
+  text("rotationX: " + nf(rotationX, 1, 2), width / 2, 30);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+/*
 // ---------------------------------------------------------------------------------
 // Game states
 // ---------------------------------------------------------------------------------
@@ -581,3 +635,4 @@ function drawProgress() {
   textSize(16);
   text("score: " + score, virtualWidth - 70, 20);
 } 
+*/
