@@ -95,7 +95,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   requestOrientation();
-  
+
   imageMode(CENTER); 
   noStroke(); 
 
@@ -191,9 +191,6 @@ function requestOrientation() {
         }
       })
       .catch(console.error);
-  } else {
-    // For browsers that don't require explicit permission
-    window.addEventListener('deviceorientation', handleMotion, true);
   }
 }
 
@@ -224,12 +221,6 @@ function requestFullscreen() {
 // ---------------------------------------------------------------------------------
 // User interaction
 // ---------------------------------------------------------------------------------
-
-function handleMotion(event) {
-  // 'beta' and 'gamma' are tilt and rotation on axes
-  motionX = event.beta; // X axis (forward/backward tilt)
-  motionY = event.gamma; // Y axis (left/right tilt)
-}
 
 function mousePressed() { 
   isPressed = true; 
