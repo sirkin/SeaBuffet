@@ -76,6 +76,7 @@ let motionX = 0;
 let motionY = 0;
 let score = 0; 
 
+let motionButton;
 /////////////////
 /*
 let y;
