@@ -184,18 +184,18 @@ function requestMotion() {
   DeviceMotionEvent.requestPermission()
     .then(response => {
       if (response === 'granted') {
-        alert('Permission granted');
-        motionAllowed = true;
+        //alert('Permission granted');
         //console.log('Motion permission granted');
+        motionAllowed = true;
       } else {
-        //console.warn('Motion permission denied');
-        alert('Permission denied');
+        console.warn('Motion permission denied');
+        //alert('Permission denied');
         motionAllowed = false;
       }
     })
     .catch(err => {
       console.error(err);
-      alert('Error requesting motion permission');
+      //alert('Error requesting motion permission');
     });
   } else {
     motionAllowed = true;
@@ -223,7 +223,6 @@ function mouseReleased() {
   switch (gameState) {  
     case GameState.WELCOME:
       if (isInsideButton(mouseX, mouseY, virtualWidth / 2, virtualHeight / 2 + 50)) {
-
         if (!motionAllowed) {
           requestMotion();
         }
