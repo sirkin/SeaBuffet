@@ -76,6 +76,65 @@ let motionX = 0;
 let motionY = 0;
 let score = 0; 
 
+/////////////////
+
+let tilt = 0;
+let y;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  y = height / 2;
+
+  // Show start button for motion permission
+  let btn = createButton("Start / Enable Motion");
+  btn.position(width / 2 - 80, height / 2);
+  btn.mousePressed(() => {
+    // For iOS devices
+    if (
+      typeof DeviceMotionEvent !== "undefined" &&
+      typeof DeviceMotionEvent.requestPermission === "function"
+    ) {
+      DeviceMotionEvent.requestPermission().then(response => {
+        if (response === "granted") {
+          motionAllowed = true;
+          btn.remove();
+        } else {
+          alert("Motion permission denied");
+        }
+      }).catch(err => {
+        console.error("Permission error:", err);
+        alert("Error requesting motion permission");
+      });
+    } else {
+      // Non-iOS devices
+      motionAllowed = true;
+      btn.remove();
+    }
+  });
+}
+
+function draw() {
+  background(230);
+  if (motionAllowed) {
+    y = map(tilt, -90, 90, 0, height);
+  }
+
+  fill(100, 200, 255);
+  ellipse(width / 2, y, 50);
+
+  fill(0);
+  textAlign(CENTER, TOP);
+  text("Tilt device forward/backward", width / 2, 10);
+  text("beta: " + nf(tilt, 1, 2), width / 2, 30);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+/////////////////
+
+/*
 // ---------------------------------------------------------------------------------
 // Setup & initialize
 // ---------------------------------------------------------------------------------
@@ -596,3 +655,4 @@ function drawProgress() {
   textSize(16);
   text("score: " + score, virtualWidth - 70, 20);
 }
+*/
