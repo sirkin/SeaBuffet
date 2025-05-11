@@ -262,6 +262,20 @@ function draw() {
 // ---------------------------------------------------------------------------------
 
 function requestMotion() {
+  DeviceMotionEvent.requestPermission().then(response => {
+    if (response === 'granted') {
+      motionAllowed = true;
+      motionButton.remove();
+    } else {
+      motionAllowed = false;
+    }
+  })
+  .catch(err => {
+    console.error(err);
+  });
+}
+/*
+function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
       typeof DeviceMotionEvent.requestPermission === 'function') {
     DeviceMotionEvent.requestPermission().then(response => {
@@ -279,7 +293,7 @@ function requestMotion() {
     motionAllowed = true;
   }
 }
-
+*/
 function requestFullscreen() {
   let canvas = document.querySelector('canvas');
   if (canvas.requestFullscreen) {
