@@ -72,7 +72,8 @@ let lowOxyColor;
 let sea; 
 let seaX = 0; 
 
-let posY;
+let motionX = 0;
+let motionY = 0;
 let score = 0; 
 
 // ---------------------------------------------------------------------------------
@@ -93,6 +94,8 @@ function setup() {
   pixelDensity(1);
   createCanvas(windowWidth, windowHeight);
 
+  requestOrientation();
+  
   imageMode(CENTER); 
   noStroke(); 
 
@@ -174,8 +177,25 @@ function draw() {
 }
 
 // ---------------------------------------------------------------------------------
-// User interaction
+// Mobile permission
 // ---------------------------------------------------------------------------------
+
+function requestOrientation() {
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .then(response => {
+        if (response === 'granted') {
+          window.addEventListener('deviceorientation', handleMotion, true);
+        } else {
+          console.error('Permission denied');
+        }
+      })
+      .catch(console.error);
+  } else {
+    // For browsers that don't require explicit permission
+    window.addEventListener('deviceorientation', handleMotion, true);
+  }
+}
 
 function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
@@ -199,6 +219,16 @@ function requestFullscreen() {
       console.warn('Fullscreen request failed:', err);
     });
   }
+}
+
+// ---------------------------------------------------------------------------------
+// User interaction
+// ---------------------------------------------------------------------------------
+
+function handleMotion(event) {
+  // 'beta' and 'gamma' are tilt and rotation on axes
+  motionX = event.beta; // X axis (forward/backward tilt)
+  motionY = event.gamma; // Y axis (left/right tilt)
 }
 
 function mousePressed() { 
