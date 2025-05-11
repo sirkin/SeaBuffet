@@ -587,4 +587,3 @@ function drawProgress() {
   textSize(16);
   text("score: " + score, virtualWidth - 70, 20);
 }
-*/
