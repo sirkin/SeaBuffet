@@ -79,6 +79,8 @@ let score = 0;
 /////////////////
 
 let y;
+//let motionAllowed = false;
+let motionButton;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -88,29 +90,7 @@ function setup() {
   textSize(24);
   fill(0);
 
-  // iOS requires permission
-  if (
-    typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function'
-  ) {
-    let btn = createButton('Enable Motion');
-    btn.position(width / 2 - 60, height / 2);
-    btn.mousePressed(() => {
-      DeviceMotionEvent.requestPermission()
-        .then(response => {
-          if (response === 'granted') {
-            motionAllowed = true;
-            btn.remove(); // remove button after permission granted
-          } else {
-            alert('Permission denied');
-          }
-        })
-        .catch(console.error);
-    });
-  } else {
-    // Other platforms don’t need permission
-    motionAllowed = true;
-  }
+  createMotionButton(); // separate function to create the button
 }
 
 function draw() {
@@ -125,6 +105,35 @@ function draw() {
   ellipse(width / 2, y, 50);
   fill(0);
   text("rotationX: " + nf(rotationX, 1, 2), width / 2, 30);
+}
+
+function createMotionButton() {
+  if (
+    typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function'
+  ) {
+    motionButton = createButton('Enable Motion');
+    motionButton.position(width / 2 - 60, height / 2);
+    motionButton.mousePressed(requestMotionPermission);
+  } else {
+    motionAllowed = true;
+  }
+}
+
+function requestMotionPermission() {
+  DeviceMotionEvent.requestPermission()
+    .then(response => {
+      if (response === 'granted') {
+        motionAllowed = true;
+        motionButton.remove();
+      } else {
+        alert('Permission denied');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error requesting motion permission');
+    });
 }
 
 function windowResized() {
