@@ -153,7 +153,6 @@ function preload() {
   puffer = loadImage("assets/puffer.png"); 
   angel = loadImage("assets/angel.png"); 
   sea = loadImage("assets/sea.png"); 
-  arrow = loadImage("assets/arrow.png"); 
 } 
 
 function setup() {
@@ -303,7 +302,7 @@ function mouseReleased() {
     case GameState.WELCOME:
       if (isInsideButton(mouseX, mouseY, virtualWidth / 2, virtualHeight / 2 + 50)) {
         if (!motionAllowed) {
-          requestMotion();
+          //requestMotion();
         }
         gameState = GameState.PLAYING;
       }
