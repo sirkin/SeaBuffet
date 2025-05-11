@@ -183,21 +183,18 @@ function draw() {
 
 function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
-     typeof DeviceMotionEvent.requestPermission === 'function') {
-    let btn = createButton('Enable Motion');
-    btn.position(width / 2 - 60, height / 2);
-    btn.mousePressed(() => {
-      DeviceMotionEvent.requestPermission()
-        .then(response => {
-          if (response === 'granted') {
-            motionAllowed = true;
-            btn.remove();
-          } else {
-            alert('Permission denied');
-           }
-        })
-        .catch(alert('Permission denied'));
-    });
+    typeof DeviceMotionEvent.requestPermission === 'function') {
+  DeviceMotionEvent.requestPermission()
+    .then(response => {
+      if (response === 'granted') {
+        alert('Permission granted');
+        //console.log('Motion permission granted');
+      } else {
+        //console.warn('Motion permission denied');
+        alert('Permission denied');
+      }
+    })
+    .catch('Catch error') //.catch(console.error);
   } else {
     motionAllowed = true;
   }
