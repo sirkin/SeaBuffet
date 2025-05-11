@@ -23,7 +23,7 @@ let virtualWidth = 800;
 let virtualHeight = 450;
 let scaleFactor;
 
-let useTouch = false;
+let motionAllowed = false;
 let isPressed;
 
 let bgCloudCt = 2;
@@ -149,11 +149,11 @@ function draw() {
   drawingContext.rect(0, 0, virtualWidth, virtualHeight);
   drawingContext.clip();
 
-  if (useTouch) {
-    posY = mouseY;
-  } else {
-    let tiltY = rotationX;
+  if (motionAllowed) {
+    let tiltY = rotationX || 0;
     posY = map(tiltY, -90, 90, 0, height);
+  } else {
+    posY = mouseY;
   }
 
   // if (frameCount % 60 == 0) println(frameRate);
@@ -180,11 +180,12 @@ function draw() {
 
 function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function') {
+      typeof DeviceMotionEvent.requestPermission === 'function') {
   DeviceMotionEvent.requestPermission()
     .then(response => {
       if (response === 'granted') {
         console.log('Motion permission granted');
+        motionAllowed = true;
       } else {
         console.warn('Motion permission denied');
       }
