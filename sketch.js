@@ -132,7 +132,92 @@ function setupGame() {
 
   stopMotion();
   score = 0; 
-} 
+}
+
+let posY;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  posY = height / 2;
+  background(220);
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  fill(0);
+
+  // iOS requires permission
+  if (
+    typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function'
+  ) {
+    let btn = createButton('Enable Motion');
+    btn.position(width / 2 - 60, height / 2);
+    btn.mousePressed(() => {
+      DeviceMotionEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            motionAllowed = true;
+            btn.remove(); // remove button after permission granted
+          } else {
+            alert('Permission denied');
+          }
+        })
+        .catch(console.error);
+    });
+  } else {
+    // Other platforms don’t need permission
+    motionAllowed = true;
+  }
+}
+
+function draw() {
+  background(220);
+
+  if (motionAllowed) {
+    let tilt = rotationX || 0;
+    posY = map(tilt, -90, 90, 0, height);
+  }
+
+  fill(100, 200, 255);
+  ellipse(width / 2, posY, 50);
+  fill(0);
+  text("rotationX: " + nf(rotationX, 1, 2), width / 2, 30);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+/*
+// ---------------------------------------------------------------------------------
+// Mobile permission
+// ---------------------------------------------------------------------------------
+
+function requestMotion() {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function') {
+  DeviceMotionEvent.requestPermission()
+    .then(response => {
+      if (response === 'granted') {
+        alert('Permission granted');
+        //console.log('Motion permission granted');
+      } else {
+        //console.warn('Motion permission denied');
+        alert('Permission denied');
+      }
+    })
+    .catch('Catch error') //.catch(console.error);
+  } else {
+    motionAllowed = true;
+  }
+}
+
+function requestFullscreen() {
+  let canvas = document.querySelector('canvas');
+  if (canvas.requestFullscreen) {
+    canvas.requestFullscreen().catch(err => {
+      console.warn('Fullscreen request failed:', err);
+    });
+  }
+}
 
 // ---------------------------------------------------------------------------------
 // Main state machine
@@ -178,41 +263,9 @@ function draw() {
 }
 
 // ---------------------------------------------------------------------------------
-// Mobile permission
-// ---------------------------------------------------------------------------------
-
-function requestMotion() {
-  if (typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function') {
-  DeviceMotionEvent.requestPermission()
-    .then(response => {
-      if (response === 'granted') {
-        alert('Permission granted');
-        //console.log('Motion permission granted');
-      } else {
-        //console.warn('Motion permission denied');
-        alert('Permission denied');
-      }
-    })
-    .catch('Catch error') //.catch(console.error);
-  } else {
-    motionAllowed = true;
-  }
-}
-
-function requestFullscreen() {
-  let canvas = document.querySelector('canvas');
-  if (canvas.requestFullscreen) {
-    canvas.requestFullscreen().catch(err => {
-      console.warn('Fullscreen request failed:', err);
-    });
-  }
-}
-
-// ---------------------------------------------------------------------------------
 // User interaction
 // ---------------------------------------------------------------------------------
-/*
+
 function mousePressed() { 
   isPressed = true; 
 } 
@@ -250,7 +303,7 @@ function touchEnded() {
   mouseReleased();
   return false;
 }
-*/
+
 function isInsideButton(mx, my, centerX, topY, btnW = 150, btnH = 50) {
   let sx = (windowWidth - virtualWidth * scaleFactor) / 2 + (centerX - btnW / 2) * scaleFactor;
   let sy = (windowHeight - virtualHeight * scaleFactor) / 2 + topY * scaleFactor;
@@ -584,4 +637,5 @@ function drawProgress() {
   fill(255);
   textSize(16);
   text("score: " + score, virtualWidth - 70, 20);
-} 
+}
+*/
