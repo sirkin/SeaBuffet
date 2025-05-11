@@ -145,23 +145,18 @@ function setup() {
   fill(0);
 
   // iOS requires permission
-  requestMotion();
-}
-
-function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function') {
-  DeviceMotionEvent.requestPermission()
-    .then(response => {
-      if (response === 'granted') {
-        alert('Permission granted');
-        //console.log('Motion permission granted');
-      } else {
-        //console.warn('Motion permission denied');
-        alert('Permission denied');
-      }
-    })
-    .catch('Catch error') //.catch(console.error);
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission()
+      .then(response => {
+        if (response === 'granted') {
+          console.log('Motion permission granted');
+          motionAllowed = true;
+        } else {
+          console.warn('Motion permission denied');
+        }
+      })
+      .catch(console.error);
   } else {
     motionAllowed = true;
   }
