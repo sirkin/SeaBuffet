@@ -25,6 +25,7 @@ let scaleFactor;
 
 let motionAllowed = false;
 let isPressed;
+let posY;
 
 let bgCloudCt = 2;
 let fgCloudCt = 2;
@@ -72,7 +73,6 @@ let lowOxyColor;
 let sea; 
 let seaX = 0; 
 
-let posY;
 let score = 0; 
 
 let motionButton;
@@ -171,7 +171,7 @@ function setup() {
   
   setupGame(); 
 
-  createMotionButton();
+  //createMotionButton();
 } 
 
 function windowResized() {
@@ -264,22 +264,17 @@ function draw() {
 
 function requestMotion() {
   if (typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function') {
-  DeviceMotionEvent.requestPermission()
-    .then(response => {
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission().then(response => {
       if (response === 'granted') {
-        //alert('Permission granted');
-        //console.log('Motion permission granted');
+        console.log('Motion permission granted');
         motionAllowed = true;
       } else {
         console.warn('Motion permission denied');
-        //alert('Permission denied');
         motionAllowed = false;
       }
-    })
-    .catch(err => {
+    }).catch(err => {
       console.error(err);
-      //alert('Error requesting motion permission');
     });
   } else {
     motionAllowed = true;
