@@ -78,54 +78,53 @@ let score = 0;
 
 /////////////////
 
-let tilt = 0;
 let y;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   y = height / 2;
+  background(220);
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  fill(0);
 
-  // Show start button for motion permission
-  let btn = createButton("Start / Enable Motion");
-  btn.position(width / 2 - 80, height / 2);
-  btn.mousePressed(() => {
-    // For iOS devices
-    if (
-      typeof DeviceMotionEvent !== "undefined" &&
-      typeof DeviceMotionEvent.requestPermission === "function"
-    ) {
-      DeviceMotionEvent.requestPermission().then(response => {
-        if (response === "granted") {
-          motionAllowed = true;
-          btn.remove();
-        } else {
-          alert("Motion permission denied");
-        }
-      }).catch(err => {
-        console.error("Permission error:", err);
-        alert("Error requesting motion permission");
-      });
-    } else {
-      // Non-iOS devices
-      motionAllowed = true;
-      btn.remove();
-    }
-  });
+  // iOS requires permission
+  if (
+    typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function'
+  ) {
+    let btn = createButton('Enable Motion');
+    btn.position(width / 2 - 60, height / 2);
+    btn.mousePressed(() => {
+      DeviceMotionEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            motionAllowed = true;
+            btn.remove(); // remove button after permission granted
+          } else {
+            alert('Permission denied');
+          }
+        })
+        .catch(console.error);
+    });
+  } else {
+    // Other platforms don’t need permission
+    motionAllowed = true;
+  }
 }
 
 function draw() {
-  background(230);
+  background(220);
+
   if (motionAllowed) {
+    let tilt = rotationX || 0;
     y = map(tilt, -90, 90, 0, height);
   }
 
   fill(100, 200, 255);
   ellipse(width / 2, y, 50);
-
   fill(0);
-  textAlign(CENTER, TOP);
-  text("Tilt device forward/backward", width / 2, 10);
-  text("beta: " + nf(tilt, 1, 2), width / 2, 30);
+  text("rotationX: " + nf(rotationX, 1, 2), width / 2, 30);
 }
 
 function windowResized() {
