@@ -145,26 +145,24 @@ function setup() {
   fill(0);
 
   // iOS requires permission
-  if (
-    typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function'
-  ) {
-    let btn = createButton('Enable Motion');
-    btn.position(width / 2 - 60, height / 2);
-    btn.mousePressed(() => {
-      DeviceMotionEvent.requestPermission()
-        .then(response => {
-          if (response === 'granted') {
-            motionAllowed = true;
-            btn.remove(); // remove button after permission granted
-          } else {
-            alert('Permission denied');
-          }
-        })
-        .catch(console.error);
-    });
+  requestMotion();
+}
+
+function requestMotion() {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+    typeof DeviceMotionEvent.requestPermission === 'function') {
+  DeviceMotionEvent.requestPermission()
+    .then(response => {
+      if (response === 'granted') {
+        alert('Permission granted');
+        //console.log('Motion permission granted');
+      } else {
+        //console.warn('Motion permission denied');
+        alert('Permission denied');
+      }
+    })
+    .catch('Catch error') //.catch(console.error);
   } else {
-    // Other platforms don’t need permission
     motionAllowed = true;
   }
 }
