@@ -170,7 +170,7 @@ function setup() {
   
   setupGame(); 
 
-  //createMotionButton();
+  createMotionButton();
 } 
 
 function windowResized() {
@@ -205,7 +205,7 @@ function createMotionButton() {
   ) {
     motionButton = createButton('Enable Motion');
     motionButton.position(width / 2 - 60, height / 2);
-    motionButton.mousePressed(requestMotionPermission);
+    motionButton.mousePressed(requestMotion);
   } else {
     motionAllowed = true;
   }
